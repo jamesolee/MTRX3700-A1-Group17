@@ -9,6 +9,10 @@ module fifo (
   output       empty,
   output       full
 );
+    //exact same thing as lab 2 FIFO
+    //except 2 commented parts
+
+    //changed the width to 256
     localparam a_width = int'($ceil($clog2(256)));
 
     reg [1:0]       ram [2**a_width-1:0];
@@ -19,6 +23,7 @@ module fifo (
             r_ptr <= 0;
             w_ptr <= 0; 
         end
+        // added new rule to move back one pointer
         else if (del) w_ptr <= w_ptr -1;
         else begin
             if (we & ~full) begin
