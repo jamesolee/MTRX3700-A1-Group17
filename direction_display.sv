@@ -1,5 +1,5 @@
-module seven_seg(
-    input enable;
+module direction_display(
+    input enable,
     input      [1:0]  direc,
     output logic [6:0]  HEX0, // right
     output logic [6:0]  HEX1, // left
