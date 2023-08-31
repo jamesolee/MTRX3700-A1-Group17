@@ -9,7 +9,7 @@ module fifo (
   output       empty,
   output       full
 );
-    localparam a_width = int'($ceil($clog2(64)));
+    localparam a_width = int'($ceil($clog2(256)));
 
     reg [1:0]       ram [2**a_width-1:0];
     reg [a_width:0] r_ptr, w_ptr;
