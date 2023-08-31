@@ -1,20 +1,85 @@
-module seven_seg(
-    input timer;
+module LEDR(
+    input enable;
     input      [1:0]  direc,
+    input      [1:0]  torque,
     output logic [8:0]  left_LED, // LEDR[17:9]
-    output logic [8:0]  right_LED, // LEDR[8:0]
+    output logic [8:0]  right_LED // LEDR[8:0]
 );
 
-    always_ff @(posedge timer)begin
-        left_LED = (direc == 2'b00)? 9'b000001111:  //forward
-                    (direc == 2'b01)? 9'b111100000: //reverse
-                    (direc == 2'b10)? 9'b000001100: //left
-                    (direc == 2'b11)? 9'b000001111; //right
+    //torque values
+    logic [3:0] empty = 4'b0000;
+    logic [3:0] quart = 4'b0010; 
+    logic [3:0] half = 4'b1000; 
+    logic [3:0] three_quart = 4'b1100;
+    logic [3:0] full = 4'b1111;
 
-        left_LED = (direc == 2'b00)? 9'b000001111:  //forward
-                    (direc == 2'b01)? 9'b111100000: //reverse
-                    (direc == 2'b10)? 9'b000001111: //left
-                    (direc == 2'b11)? 9'b000001100; //right
+    always_ff @(posedge timer)begin: torque_display
+        if (empty) begin
+            left_LED <= {zero, 1'b0, zero};
+            right_LED <= {zero, 1'b0, zero};
+        end
 
+        //no extension version
+        else begin
+            left_LED <= (instruction == 2'b00)? {zero, 1'b0, full}:  
+                        (instruction == 2'b01)? {full, 1'b0, zero}: 
+                        (instruction == 2'b10)? {zero, 1'b0, three_quart}:
+                        (instruction == 2'b11)? {zero, 1'b0, full};
+
+            right_LED <= (instruction == 2'b00)? {zero, 1'b0, full}:
+                        (instruction == 2'b01)? {full, 1'b0, zero}:
+                        (instruction == 2'b10)? {zero, 1'b0, full}:
+                        (instruction == 2'b11)? {zero, 1'b0, three_quart};
+        end    
+
+        //extension version
+        // else begin
+        // case (instruction)
+        //     2'b00:begin //forward
+        //         left_LED <= (torque == 2'b00)? {zero, 1'b0, zero}:  
+        //             (torque == 2'b01)? {zero, 1'b0, half}: 
+        //             (torque == 2'b10)? {zero, 1'b0, three_quart}:
+        //             (torque == 2'b11)? {zero, 1'b0, full};
+
+        //         right_LED <= (torque == 2'b00)? {zero, 1'b0, zero}:  
+        //             (torque == 2'b01)? {zero, 1'b0, half}: 
+        //             (torque == 2'b10)? {zero, 1'b0, three_quart}:
+        //             (torque == 2'b11)? {zero, 1'b0, full};
+        //     end
+        //     2'b01:begin //reverse
+        //         left_LED <= (torque == 2'b00)? {zero, 1'b0, zero}:  
+        //             (torque == 2'b01)? {half, 1'b0, zero}: 
+        //             (torque == 2'b10)? {three_quart, 1'b0, zero}0:
+        //             (torque == 2'b11)? {full, 1'b0, zero};
+
+        //         right_LED <= (torque == 2'b00)? {zero, 1'b0, zero}:  
+        //             (torque == 2'b01)? {half, 1'b0, zero}: 
+        //             (torque == 2'b10)? {three_quart, 1'b0, zero}0:
+        //             (torque == 2'b11)? {full, 1'b0, zero};
+        //     end
+        //     2'b10:begin //left
+        //         left_LED <= (torque == 2'b00)? {zero, 1'b0, zero}:  
+        //             (torque == 2'b01)? {zero, 1'b0, quart}: 
+        //             (torque == 2'b10)? {zero, 1'b0, half}:
+        //             (torque == 2'b11)? {zero, 1'b0, full};
+
+        //         right_LED <= (torque == 2'b00)? {zero, 1'b0, zero}:  
+        //             (torque == 2'b01)? {zero, 1'b0, half}: 
+        //             (torque == 2'b10)? {zero, 1'b0, three_quart}:
+        //             (torque == 2'b11)? {zero, 1'b0, full};
+        //     end
+        //     2'b11:begin
+        //         left_LED <= (torque == 2'b00)? {zero, 1'b0, zero}:  
+        //             (torque == 2'b01)? {zero, 1'b0, half}: 
+        //             (torque == 2'b10)? {zero, 1'b0, three_quart}:
+        //             (torque == 2'b11)? {zero, 1'b0, full};
+
+        //         right_LED <= (torque == 2'b00)? {zero, 1'b0, zero}:  
+        //             (torque == 2'b01)? {zero, 1'b0, quart}: 
+        //             (torque == 2'b10)? {zero, 1'b0, half}:
+        //             (torque == 2'b11)? {zero, 1'b0, full};
+        //     end
+        //  endcase  
+        // end 
     end
 endmodule
