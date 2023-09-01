@@ -8,6 +8,7 @@ module timer (
 
     logic [27:0]clk_cnt = 0;
 
+    //set timer to 1 for 1 clk cycle every 2s
     always_ff @(posedge clk)begin
         if(!enable) begin
             clk_cnt <= 0;
