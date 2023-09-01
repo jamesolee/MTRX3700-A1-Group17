@@ -59,7 +59,7 @@ module FSM(
         .empty(empty),
         .full(full));
 
-    LEDR(
+    torque_display u6(
     .enable(timer_enable);
     .direc(instruction[1:0]),
     .torque(instruction[3:2]),
@@ -67,7 +67,7 @@ module FSM(
     .right_LED(LEDR[8:0])
 );
 
-    seven_seg u7(
+    direction_display u7(
     .enable(timer_enable);
     .direc(instruction[1:0]),
     .HEX0(HEX0), // right

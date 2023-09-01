@@ -1,4 +1,4 @@
-module LEDR(
+module torque_display(
     input enable;
     input      [1:0]  direc,
     input      [1:0]  torque,
