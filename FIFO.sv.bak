@@ -13,8 +13,10 @@ module fifo (
     //except 2 commented parts
 
     //changed the width to 256
-    reg [1:0]       ram [255:0];
-    reg [2:0] r_ptr, w_ptr;
+    localparam a_width = int'($ceil($clog2(256)));
+
+    reg [1:0]       ram [2**a_width-1:0];
+    reg [a_width:0] r_ptr, w_ptr;
 
     always @(posedge clk) begin
         if (rst) begin
@@ -36,7 +38,7 @@ module fifo (
     end
 
     assign empty = r_ptr == w_ptr? 1:0;
-    assign full = r_ptr[1:0] != w_ptr[1:0]? 0: 
-                    r_ptr[2] != w_ptr[2]? 1:0;
+    assign full = r_ptr[a_width-1:0] != w_ptr[a_width-1:0]? 0: 
+                    r_ptr[a_width] != w_ptr[a_width]? 1:0;
 
 endmodule

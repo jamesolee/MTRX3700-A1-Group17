@@ -1,6 +1,6 @@
 `timescale 1ns/1ns
 
-module countdown (
+module timer (
     input             clk, 
     input             enable, 
     output logic      timer
