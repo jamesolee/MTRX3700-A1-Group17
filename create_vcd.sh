@@ -1,6 +1,6 @@
 #!/bin/sh
 
-testbench_name="FSM_tb";   # The testbench used for the simulation
+testbench_name="top_level_tb";   # The testbench used for the simulation
 
 ### Run this to use Verilator and g++ to build and simulate your Verilog code.
 # Output: A waveform .png for a quick reference, and a .vcd that you can download and view in GTKWave, etc, for more detailed analysis.

@@ -14,14 +14,13 @@ module FSM(
             waiting: state <= (reset)? idle:
                                 (save)? saving:
                                 (execute | full)? read: waiting;
-            read: state <= (reset)? idle: 
-                            (timer)? display: read;
-            display: state <= (empty | reset)? idle: read;
+            read: state <= (reset)? idle: display;
+            display: state <= (empty | reset)? idle: (timer)? read: display;
         endcase
     end
     
     assign write_enable = (state == saving)? 1:0;
     assign read_enable = (state == read)? 1:0;
-    assign timer_enable = (state == read || state == display)? 1:0;
+    assign timer_enable = (state == read | state == display)? 1:0;
 
 endmodule

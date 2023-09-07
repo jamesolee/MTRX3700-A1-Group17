@@ -8,8 +8,8 @@ module torque_display(
 
     //torque values
     logic [3:0] zero = 4'b0000;
-    logic [3:0] quart = 4'b0010; 
-    logic [3:0] half = 4'b1000; 
+    logic [3:0] quart = 4'b0010;
+    logic [3:0] half = 4'b1000;
     logic [3:0] three_quart = 4'b1100;
     logic [3:0] full = 4'b1111;
 
@@ -18,22 +18,9 @@ module torque_display(
             left_LED = {zero, 1'b0, zero};
             right_LED = {zero, 1'b0, zero};
         end
-
-        //no extension version
-        else begin
-            left_LED = (instruction == 2'b00)? {zero, 1'b0, full}:  
-                        (instruction == 2'b01)? {full, 1'b0, zero}: 
-                        (instruction == 2'b10)? {zero, 1'b0, three_quart}:
-                        (instruction == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
-
-            right_LED = (instruction == 2'b00)? {zero, 1'b0, full}:
-                        (instruction == 2'b01)? {full, 1'b0, zero}:
-                        (instruction == 2'b10)? {zero, 1'b0, full}:
-                        (instruction == 2'b11)? {zero, 1'b0, three_quart} : {zero, 1'b0, zero};
-        end    
 		  
 		  //extension version
-        /* else begin
+        else begin
 				case (instruction)
               2'b00:begin //forward
                  left_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
@@ -81,7 +68,6 @@ module torque_display(
              end
           endcase  
          end 
-			*/
 
     end
 endmodule

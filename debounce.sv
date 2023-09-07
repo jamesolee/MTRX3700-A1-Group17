@@ -2,7 +2,7 @@ module debounce (
     input clk, button,
     output reg button_edge
 );
-  localparam delay_val = 2500; // 50us with clk period 20ns is ____ counts
+  localparam delay_val = 20; // 50us with clk period 20ns is ____ counts
   int count = 0;
   reg deb = 0;
   
@@ -26,3 +26,4 @@ module debounce (
   assign button_edge = (button_pressed > button_q0);
 
 endmodule
+
