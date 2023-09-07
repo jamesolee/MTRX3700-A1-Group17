@@ -29,7 +29,7 @@ module top_level(
         .write_enable(write_enable),
         .read_enable(read_enable),
         .timer_enable(timer_enable)
-    );
+    )
 	 
     countdown u_clock (
         .clk(CLOCK50), 
