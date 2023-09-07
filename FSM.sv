@@ -22,6 +22,6 @@ module FSM(
     
     assign write_enable = (state == saving)? 1:0;
     assign read_enable = (state == read)? 1:0;
-    assign timer_enable = (state == read | state == display)? 1:0;
+    assign timer_enable = (state == read || state == display)? 1:0;
 
 endmodule

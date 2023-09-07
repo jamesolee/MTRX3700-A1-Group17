@@ -15,7 +15,7 @@ module fifo (
     //changed the width to 256 (5-bit address)
     reg [3:0]       ram [255:0];
 
-    localparam a_width = 5; // 1 wider than ram depth 
+    localparam a_width = 8; // 1 wider than ram depth 
     reg [a_width:0] r_ptr, w_ptr;
 
     always @(posedge clk) begin
