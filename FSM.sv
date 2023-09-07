@@ -6,11 +6,16 @@ module FSM(
     output [17:0] LEDR //Left torque & right torque
 );
 
+	 // Debounced KEY values - KEY[3], KEY[2], KEY[1], KEY[0]
     logic save, execute, reset, delete;
+	 
+	 // FIFO flags and Timer flags 
     logic write_enable, read_enable, timer_enable;
     logic [3:0]instruction;
     logic empty, full;     
-	logic timer; // used but never assigned 
+	 logic timer; 
+	 
+	 // States for FSM 
     enum {idle, saving,
 	 waiting, read, display} state = idle; 
 
@@ -30,26 +35,28 @@ module FSM(
     assign write_enable = (state == saving)? 1:0;
     assign read_enable = (state == read)? 1:0;
     assign timer_enable = (state == read | state == display)? 1:0;
-	 countdown u_clock (.clk(CLOCK50), 
-				  .enable(timer_enable), 
-				  .timer(timer));
+	 
+	 countdown u_clock (
+			.clk(CLOCK50), 
+			.enable(timer_enable), 
+			.timer(timer));
 
     debounce u_debounce0 (
         .clk(CLOCK50), 
-        .button(KEY[0]),
-        .button_pressed(delete));
+        .button(!KEY[0]),
+        .button_edge(delete));
     debounce u_debounce1 (
         .clk(CLOCK50), 
-        .button(KEY[1]),
-        .button_pressed(reset));
+        .button(!KEY[1]),
+        .button_edge(reset));
     debounce u_debounce2 (
         .clk(CLOCK50), 
-        .button(KEY[2]),
-        .button_pressed(execute));
+        .button(!KEY[2]),
+        .button_edge(execute));
     debounce u_debounce3 (
         .clk(CLOCK50), 
-        .button(KEY[3]),
-        .button_pressed(save));
+        .button(!KEY[3]),
+        .button_edge(save));
 
     fifo u_fifo (
         .clk(CLOCK50),

@@ -20,7 +20,7 @@ module torque_display(
         end
 
         //no extension version
-        /* else begin
+        else begin
             left_LED = (instruction == 2'b00)? {zero, 1'b0, full}:  
                         (instruction == 2'b01)? {full, 1'b0, zero}: 
                         (instruction == 2'b10)? {zero, 1'b0, three_quart}:
@@ -30,10 +30,10 @@ module torque_display(
                         (instruction == 2'b01)? {full, 1'b0, zero}:
                         (instruction == 2'b10)? {zero, 1'b0, full}:
                         (instruction == 2'b11)? {zero, 1'b0, three_quart} : {zero, 1'b0, zero};
-        end */   
+        end    
 		  
 		  //extension version
-        else begin
+        /* else begin
 				case (instruction)
               2'b00:begin //forward
                  left_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
@@ -81,6 +81,7 @@ module torque_display(
              end
           endcase  
          end 
+			*/
 
     end
 endmodule

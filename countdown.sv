@@ -1,10 +1,13 @@
 `timescale 1ns/1ns
+//The above compiler directive explicitly specifies <time unit>/<time precision>
+
 
 module countdown (
     input             clk, 
     input             enable, 
     output logic      timer
 );
+	 localparam delay_val = 50000000;
 
     logic [27:0]clk_cnt = 0;
 
@@ -15,7 +18,7 @@ module countdown (
             timer <= 0;
         end
         else begin
-            if (clk_cnt == 50000000-1) begin
+            if (clk_cnt == delay_val-1) begin
                 timer <= 1;
                 clk_cnt <= 0;
             end
