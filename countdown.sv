@@ -7,7 +7,7 @@ module countdown (
     input             enable, 
     output logic      timer
 );
-	 localparam delay_val = 50000000;
+	 localparam delay_val = 100000000;
 
     logic [27:0]clk_cnt = 0;
 
