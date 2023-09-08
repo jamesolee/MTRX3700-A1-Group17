@@ -1,6 +1,7 @@
 module speed_display(
     input enable,
     input read_enable,
+	 input reset,
     input      [1:0]  instruction,
     input      [1:0]  torque,
     output logic [6:0]  HEX4, // right digit
@@ -16,7 +17,7 @@ module speed_display(
 
     //set absolute change in speed for left & right wheel
     always_comb begin
-        case (instruction):
+        case (instruction)
             2'b00: begin
                 acc_fl = (torque == 0)? 0: 
                         (torque == 1)? 2:
@@ -52,12 +53,12 @@ module speed_display(
                 acc_br = 0;  
             end
             2'b11:begin //right
-                acc_l = (torque == 0)? 0: 
+                acc_fl = (torque == 0)? 0: 
                         (torque == 1)? 2:
                         (torque == 2)? 4:
                         (torque == 3)? 6: 
                         (torque == 4)? 8:0;   
-                acc_r = (torque == 0)? 0: 
+                acc_fr = (torque == 0)? 0: 
                         (torque == 1)? 0:
                         (torque == 2)? 2:
                         (torque == 3)? 4:
@@ -65,7 +66,7 @@ module speed_display(
                 acc_bl = 0;
                 acc_br = 0;
             end 
-            else: begin
+            default: begin
                 acc_bl = 0;
                 acc_br = 0;
                 acc_fl = 0;
@@ -74,12 +75,14 @@ module speed_display(
         endcase 
     end
 
-    output logic [4:0]bcd_r1, bcd_r2, bcd_l1, bcd_l2;
+    logic [4:0]bcd_r1, bcd_r2, bcd_l1, bcd_l2;
 
     always_ff @(posedge read_enable) begin
         //calculate current speed
-        vel_r = (vel_r-acc_br > 9)? vel_r: (vel_r+acc_fr-acc_br); 
-        vel_l = (vel_l-acc_bl > 9)? vel_l: (vel_l+acc_fl-acc_bl);
+        vel_r = (reset)? 0: 
+					 (vel_r-acc_br > 9)? vel_r: (vel_r+acc_fr-acc_br); 
+        vel_l = (reset)? 0:
+					 (vel_l-acc_bl > 9)? vel_l: (vel_l+acc_fl-acc_bl);
 
         bcd_r2 = (~enable)? 12: //force HEX to be off
                  (vel_r > 9)? 9: 0;

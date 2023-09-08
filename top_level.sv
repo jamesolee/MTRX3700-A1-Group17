@@ -2,9 +2,9 @@ module top_level(
     input [3:0] KEY, //save, execute, reset, delete (respectively)
     input [4:0]SW, //basic instruction/direction SW[1:0], torque level SW[4:2]
     input CLOCK_50, //Clk
-    output [6:0] HEX3, HEX2, HEX1, HEX0, //7 seg display
+    output [6:0] HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, //7 seg display
     output [17:0] LEDR, //Left torque & right torque
-	 output [8:0] LEDG
+	 output [8:0] LEDG //for observing states
 );
 
 	 // Debounced KEY values - KEY[3], KEY[2], KEY[1], KEY[0]
@@ -79,7 +79,7 @@ module top_level(
     .HEX3(HEX3)  // reverse backwards
     );
 
-    module speed_display(
+    speed_display u_speed(
     .enable(timer_enable),
     .read_enable(read_enable),
     .instruction(instruction[1:0]),
@@ -88,5 +88,6 @@ module top_level(
     .HEX5(HEX5), // right tenth
     .HEX6(HEX6), // left digit
     .HEX7(HEX7)  // left tenth
-);
+	 );
+	
 endmodule
