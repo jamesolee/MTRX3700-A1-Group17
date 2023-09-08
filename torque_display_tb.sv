@@ -2,7 +2,7 @@ module torque_display_tb;
     // Step 1: Define test bench variables:
     logic enable;
     logic [1:0]  instruction;
-    logic [1:0]  torque; 
+    logic [2:0]  torque; 
     logic [8:0]  left_LED; // LEDR[17:9]
     logic [8:0]  right_LED; // LEDR[8:0]
 
@@ -32,7 +32,7 @@ module torque_display_tb;
 
         repeat(15)begin
             #1
-            instruction = (torque == 2'b11)? instruction + 1: instruction; 
+            instruction = (torque == 3'b011)? instruction + 1: instruction; 
             torque = torque + 1'b1;
         end       
             

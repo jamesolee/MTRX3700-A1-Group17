@@ -4,8 +4,8 @@ module fifo (
   input        we,
   input        re,
   input        del,
-  input        [3:0] data_in,
-  output reg   [3:0] data_out,
+  input        [4:0] data_in,
+  output reg   [4:0] data_out,
   output       empty,
   output       full
 );
@@ -13,7 +13,7 @@ module fifo (
     //except 2 commented parts
 
     //changed the width to 256 (5-bit address)
-    reg [3:0]       ram [255:0];
+    reg [4:0]       ram [255:0];
 
     localparam a_width = 8; // 1 wider than ram depth 
     reg [a_width:0] r_ptr, w_ptr;

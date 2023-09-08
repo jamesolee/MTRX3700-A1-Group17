@@ -1,6 +1,6 @@
 module top_level(
     input [3:0] KEY, //save, execute, reset, delete (respectively)
-    input [3:0]SW, //basic instruction/direction SW[1:0], torque level SW[3:2]
+    input [4:0]SW, //basic instruction/direction SW[1:0], torque level SW[4:2]
     input CLOCK_50, //Clk
     output [6:0] HEX3, HEX2, HEX1, HEX0, //7 seg display
     output [17:0] LEDR, //Left torque & right torque
@@ -12,7 +12,7 @@ module top_level(
 	 
 	 // FIFO flags and Timer flags 
     logic write_enable, read_enable, timer_enable, fifo_reset;
-    logic [3:0]instruction;
+    logic [4:0]instruction;
     logic empty, full;     
     logic timer; 
 
@@ -59,7 +59,7 @@ module top_level(
         .we(write_enable),
         .re(read_enable),
         .del(delete),
-        .data_in(SW[3:0]),
+        .data_in(SW[4:0]),
         .data_out(instruction),
         .empty(empty),
         .full(full));
@@ -67,9 +67,8 @@ module top_level(
     torque_display u_torque(
     .enable(timer_enable),
     .instruction(instruction[1:0]),
-    .torque(instruction[3:2]),
-    .left_LED(LEDR[17:9]),
-    .right_LED(LEDR[8:0]));
+    .torque(instruction[4:2]),
+    .LEDR(LEDR[17:0]));
 
     direction_display u_direction(
     .enable(timer_enable),

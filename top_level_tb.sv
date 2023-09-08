@@ -1,14 +1,16 @@
 module top_level_tb;
     // Step 1: Define test bench variables:
     logic [3:0] KEY; //save, execute, reset, delete (respectively)
-    logic [3:0]SW; //basic instruction/direction SW[1:0], torque level SW[3:2]
-    logic CLOCK50; //Clk
+    logic [4:0]SW; //basic instruction/direction SW[1:0], torque level SW[3:2]
+    logic CLOCK_50; //Clk
 
     logic [6:0]  HEX0; // right
     logic [6:0]  HEX1; // left
     logic [6:0]  HEX2; // forward
     logic [6:0]  HEX3;  // reverse backwards
     logic [17:0] LEDR; //Left torque & right torque
+
+    logic [8:0] LEDG;
 
     // Step 2: Instantiate Device Under Test:
     top_level DUT (.*); // SystemVerilog feature: `.*` automatically connects ports of the instantiated module to variables in this module with the same port/variable name!! So useful :D.
@@ -24,7 +26,7 @@ module top_level_tb;
     //     end
     // end
 
-    initial forever #10 CLOCK50 = ~CLOCK50; // every 20ns = 50MHz (simulating board clock)
+    initial forever #10 CLOCK_50 = ~CLOCK_50; // every 20ns = 50MHz (simulating board clock)
 
     // localparam seconds = 1000000000; // conversion from nanoseconds to seconds
     localparam units = 1000;
@@ -33,38 +35,38 @@ module top_level_tb;
     initial begin
         $dumpfile("test_top_level.vcd");  // Tell the simulator to dump variables into the 'waveform.vcd' file during the simulation. Required to produce a waveform .vcd file.
         $dumpvars();
-        CLOCK50 = 0;
+        CLOCK_50 = 0;
         #(4*units);
 
-        SW = 4'b0000; // forward 0
+        SW = 5'b00000; // forward 0
         #(1*units); // 1 second delay between setting instruction switches and pressing the save key
         KEY[3] = 1; // pressed save
         #(3*units);
         KEY[3] = 0; // unpress save
         #(4*units);
 
-        SW = 4'b0100; // forward 1
+        SW = 5'b00100; // forward 1
         #(1*units); // 1 second delay between setting instruction switches and pressing the save key
         KEY[3] = 1; // pressed save
         #(3*units);
         KEY[3] = 0; // unpress save
         #(4*units);
 
-        SW = 4'b1000; // forward 2
+        SW = 5'b01000; // forward 2
         #(1*units); // 1 second delay between setting instruction switches and pressing the save key
         KEY[3] = 1; // pressed save
         #(3*units);
         KEY[3] = 0; // unpress save
         #(4*units);
 
-        SW = 4'b1100; // forward 3
+        SW = 5'b01100; // forward 3
         #(1*units); // 1 second delay between setting instruction switches and pressing the save key
         KEY[3] = 1; // pressed save
         #(3*units);
         KEY[3] = 0; // unpress save
         #(4*units);
 
-        SW = 4'b1110; // left 3
+        SW = 5'b01110; // left 3
         #(1*units); // 1 second delay between setting instruction switches and pressing the save key
         KEY[3] = 1; // pressed save
         #(3*units);

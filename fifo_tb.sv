@@ -5,8 +5,8 @@ module fifo_tb;
     logic we;
     logic re;
     logic del;
-    logic [3:0] data_in;
-    logic [3:0] data_out;
+    logic [4:0] data_in;
+    logic [4:0] data_out;
     logic empty;
     logic full;
 
@@ -41,45 +41,45 @@ module fifo_tb;
         del = 0;
         rst = 0;
         #(1*units);
-        data_in = 4'b0111;
+        data_in = 5'b00111;
         #(1*units);
-        data_in = 4'b0100;
+        data_in = 5'b00100;
         #(1*units);
-        data_in = 4'b0011;
+        data_in = 5'b00011;
         #(1*units);
 
         
         #(1*units);
-        data_in = 4'b0111;
+        data_in = 5'b00111;
         we = 1; // Write Enable
         #(1*units);
-        data_in = 4'b0100;
+        data_in = 5'b00100;
         #(1*units);
-        data_in = 4'b0010;
+        data_in = 5'b00010;
         #(1*units);
         del = 1; // Delete
         #(1*units);
         del = 0; // Delete off
-        data_in = 4'b0010;
+        data_in = 5'b00010;
         #(1*units);
         rst = 1; // Reset
         #(4*units);
         // 3 instructions should have been added, then 1 removed, then 1 added, then rst
 
         rst = 0; // Reset off
-        data_in = 4'b0000;
+        data_in = 5'b00000;
         #(1*units);
-        data_in = 4'b0001;
+        data_in = 5'b00001;
         #(1*units);
-        data_in = 4'b0010;
+        data_in = 5'b00010;
         #(1*units);
-        data_in = 4'b0011;
+        data_in = 5'b00011;
         #(1*units);
-        data_in = 4'b0100;
+        data_in = 5'b00100;
         #(1*units);
-        data_in = 4'b0101;
+        data_in = 5'b00101;
         #(1*units);
-        data_in = 4'b0110;
+        data_in = 5'b00110;
         #(1*units);
         we = 0; // Write disable
         re = 1; // Read enable

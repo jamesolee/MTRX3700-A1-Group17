@@ -19,6 +19,7 @@ module FSM(
                                 (execute | full)? read: waiting;
             read: next_state = (reset)? idle: display;
             display: next_state = (empty | reset)? idle: (timer)? read: display;
+            default: next_state = idle;
         endcase
     end
 	 

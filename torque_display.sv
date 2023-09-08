@@ -1,80 +1,64 @@
 module torque_display(
     input enable,
     input      [1:0]  instruction,
-    input      [1:0]  torque,
-    output logic [8:0]  left_LED, // LEDR[17:9]
-    output logic [8:0]  right_LED // LEDR[8:0]
+    input      [2:0]  torque,
+    output logic [17:0]  LEDR // LEDR[17:0]
 );
-
-    //torque values
-    logic [3:0] zero = 4'b0000;
-    logic [3:0] quart = 4'b0010;
-    logic [3:0] half = 4'b1000;
-    logic [3:0] three_quart = 4'b1100;
-    logic [3:0] full = 4'b1111;
 	 
 	 //wires for LEDs
-	 logic [8:0] left_lights, right_lights;
+	 logic [17:0] leds;
 
     always_comb begin: torque_display
         if (~enable) begin
-            left_lights = {zero, 1'b0, zero};
-            right_lights = {zero, 1'b0, zero};
+            leds = 0;
         end
-		  
-		  //extension version
         else begin
-				case (instruction)
-              2'b00:begin //forward
-                 left_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
-                     (torque == 2'b01)? {zero, 1'b0, half}: 
-                     (torque == 2'b10)? {zero, 1'b0, three_quart}:
-                     (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
-
-                 right_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
-                     (torque == 2'b01)? {zero, 1'b0, half}: 
-                     (torque == 2'b10)? {zero, 1'b0, three_quart}:
-                     (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
-             end
-             2'b01:begin //reverse
-                 left_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
-                     (torque == 2'b01)? {half, 1'b0, zero}: 
-                     (torque == 2'b10)? {three_quart, 1'b0, zero}:
-                     (torque == 2'b11)? {full, 1'b0, zero} : {zero, 1'b0, zero};
-
-                 right_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
-                     (torque == 2'b01)? {half, 1'b0, zero}: 
-                     (torque == 2'b10)? {three_quart, 1'b0, zero}:
-                     (torque == 2'b11)? {full, 1'b0, zero} : {zero, 1'b0, zero};
-             end
-             2'b10:begin //left
-                 left_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
-                     (torque == 2'b01)? {zero, 1'b0, quart}: 
-                     (torque == 2'b10)? {zero, 1'b0, half}:
-                     (torque == 2'b11)? {zero, 1'b0, three_quart} : {zero, 1'b0, zero};
-
-                 right_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
-                     (torque == 2'b01)? {zero, 1'b0, half}: 
-                     (torque == 2'b10)? {zero, 1'b0, three_quart}:
-                     (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
-             end
-             2'b11:begin //right
-                 left_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
-                     (torque == 2'b01)? {zero, 1'b0, half}: 
-                     (torque == 2'b10)? {zero, 1'b0, three_quart}:
-                     (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
-
-                 right_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
-                     (torque == 2'b01)? {zero, 1'b0, quart}: 
-                     (torque == 2'b10)? {zero, 1'b0, half}:
-                     (torque == 2'b11)? {zero, 1'b0, three_quart} : {zero, 1'b0, zero};
-             end
-          endcase  
-         end 
-
+            case (instruction)
+                2'b00: begin // Forward
+                    case (torque)
+                        3'b000: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b0000}; // Forward 0
+                        3'b001: leds = {4'b0000,1'b0,4'b1000,4'b0000,1'b0,4'b1000}; // Forward 1
+                        3'b010: leds = {4'b0000,1'b0,4'b1100,4'b0000,1'b0,4'b1100}; // Forward 2
+                        3'b011: leds = {4'b0000,1'b0,4'b1110,4'b0000,1'b0,4'b1110}; // Forward 3
+                        3'b100: leds = {4'b0000,1'b0,4'b1111,4'b0000,1'b0,4'b1111}; // Forward 4
+                        default: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b0000}; // 0
+                    endcase
+                end
+                2'b01: begin // Backward
+                    case (torque)
+                        3'b000: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b0000}; // Backward 0
+                        3'b001: leds = {4'b0001,1'b0,4'b0000,4'b0001,1'b0,4'b0000}; // Backward 1
+                        3'b010: leds = {4'b0011,1'b0,4'b0000,4'b0011,1'b0,4'b0000}; // Backward 2
+                        3'b011: leds = {4'b0111,1'b0,4'b0000,4'b0111,1'b0,4'b0000}; // Backward 3
+                        3'b100: leds = {4'b1111,1'b0,4'b0000,4'b1111,1'b0,4'b0000}; // Backward 4
+                        default: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b0000}; // 0
+                    endcase
+                end
+                2'b10: begin // Left
+                    case (torque)
+                        3'b000: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b0000}; // Left 0
+                        3'b001: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b1000}; // Left 1
+                        3'b010: leds = {4'b0000,1'b0,4'b1000,4'b0000,1'b0,4'b1100}; // Left 2
+                        3'b011: leds = {4'b0000,1'b0,4'b1100,4'b0000,1'b0,4'b1110}; // Left 3
+                        3'b100: leds = {4'b0000,1'b0,4'b1110,4'b0000,1'b0,4'b1111}; // Left 4
+                        default: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b0000}; // 0
+                    endcase
+                end
+                2'b11: begin // Right
+                    case (torque)
+                        3'b000: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b0000}; // Right 0
+                        3'b001: leds = {4'b0000,1'b0,4'b1000,4'b0000,1'b0,4'b0000}; // Right 1
+                        3'b010: leds = {4'b0000,1'b0,4'b1100,4'b0000,1'b0,4'b1000}; // Right 2
+                        3'b011: leds = {4'b0000,1'b0,4'b1110,4'b0000,1'b0,4'b1100}; // Right 3
+                        3'b100: leds = {4'b0000,1'b0,4'b1111,4'b0000,1'b0,4'b1110}; // Right 4
+                        default: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b0000}; // 0
+                    endcase
+                end
+                default: leds = {4'b0000,1'b0,4'b0000,4'b0000,1'b0,4'b0000}; // 0
+            endcase
+        end
     end
 	 
-	 assign right_LED = right_lights;
-	 assign left_LED = left_lights;
+	 assign LEDR = leds;
 	 
 endmodule
