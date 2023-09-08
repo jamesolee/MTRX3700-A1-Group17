@@ -5,6 +5,7 @@ module debounce (
   localparam delay_val = 20; // 50us with clk period 20ns is ____ counts
   int count = 0;
   reg deb = 0;
+  logic button_q0, button_pressed;
   
   // Your code here!
   always @(posedge clk) begin
@@ -17,8 +18,6 @@ module debounce (
     else
       count <= count + 1;
   end 
-
-  logic button_q0, button_pressed;
   
   always_ff @(posedge clk) begin : edge_detect
       button_q0 <= button_pressed;
