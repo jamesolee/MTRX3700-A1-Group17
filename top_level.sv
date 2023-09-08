@@ -77,5 +77,16 @@ module top_level(
     .HEX1(HEX1), // left
     .HEX2(HEX2), // forward
     .HEX3(HEX3)  // reverse backwards
+    );
+
+    module speed_display(
+    .enable(timer_enable),
+    .read_enable(read_enable),
+    .instruction(instruction[1:0]),
+    .torque(instruction[4:2]),
+    .HEX4(HEX4), // right digit
+    .HEX5(HEX5), // right tenth
+    .HEX6(HEX6), // left digit
+    .HEX7(HEX7)  // left tenth
 );
 endmodule
