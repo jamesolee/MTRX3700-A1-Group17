@@ -4,18 +4,18 @@ module fifo (
   input        we,
   input        re,
   input        del,
-  input        [1:0] data_in,
-  output reg   [1:0] data_out,
+  input        [3:0] data_in,
+  output reg   [3:0] data_out,
   output       empty,
   output       full
 );
     //exact same thing as lab 2 FIFO
     //except 2 commented parts
 
-    //changed the width to 256
-    localparam a_width = int'($ceil($clog2(256)));
+    //changed the width to 256 (5-bit address)
+    reg [3:0]       ram [255:0];
 
-    reg [1:0]       ram [2**a_width-1:0];
+    localparam a_width = 8; // 1 wider than ram depth 
     reg [a_width:0] r_ptr, w_ptr;
 
     always @(posedge clk) begin
@@ -27,11 +27,11 @@ module fifo (
         else if (del) w_ptr <= w_ptr -1;
         else begin
             if (we & ~full) begin
-                ram[w_ptr] <= data_in;
+                ram[w_ptr[a_width-1:0]] <= data_in;
                 w_ptr <= w_ptr + 1;
             end
             if (re & ~empty) begin
-                data_out <= ram[r_ptr];
+                data_out <= ram[r_ptr[a_width-1:0]];
                 r_ptr <= r_ptr + 1;
             end
         end

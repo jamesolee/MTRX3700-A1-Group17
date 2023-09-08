@@ -3,20 +3,18 @@ module top_level(
     input [3:0]SW, //basic instruction/direction SW[1:0], torque level SW[3:2]
     input CLOCK_50, //Clk
     output [6:0] HEX3, HEX2, HEX1, HEX0, //7 seg display
-    output [17:0] LEDR //Left torque & right torque
+    output [17:0] LEDR, //Left torque & right torque
+	 output [8:0] LEDG
 );
 
 	 // Debounced KEY values - KEY[3], KEY[2], KEY[1], KEY[0]
     logic save, execute, reset, delete;
 	 
 	 // FIFO flags and Timer flags 
-    logic write_enable, read_enable, timer_enable;
+    logic write_enable, read_enable, timer_enable, fifo_reset;
     logic [3:0]instruction;
     logic empty, full;     
     logic timer; 
-	 
-	 // States for FSM 
-    //enum {idle, saving, waiting, read, display} state = idle; 
 
     FSM u_FSM (
         .clk(CLOCK_50),
@@ -28,7 +26,9 @@ module top_level(
         .timer(timer),
         .write_enable(write_enable),
         .read_enable(read_enable),
-        .timer_enable(timer_enable)
+        .timer_enable(timer_enable),
+		  .fifo_reset(fifo_reset),
+		  .lights(LEDG[2:0])
     );
 	 
     countdown u_clock (
@@ -55,7 +55,7 @@ module top_level(
 
     fifo u_fifo (
         .clk(CLOCK_50),
-        .rst(reset),
+        .rst(fifo_reset),
         .we(write_enable),
         .re(read_enable),
         .del(delete),

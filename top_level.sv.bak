@@ -1,7 +1,7 @@
 module top_level(
     input [3:0] KEY, //save, execute, reset, delete (respectively)
     input [3:0]SW, //basic instruction/direction SW[1:0], torque level SW[3:2]
-    input CLOCK50, //Clk
+    input CLOCK_50, //Clk
     output [6:0] HEX3, HEX2, HEX1, HEX0, //7 seg display
     output [17:0] LEDR //Left torque & right torque
 );
@@ -16,10 +16,10 @@ module top_level(
     logic timer; 
 	 
 	 // States for FSM 
-    enum {idle, saving, waiting, read, display} state = idle; 
+    //enum {idle, saving, waiting, read, display} state = idle; 
 
     FSM u_FSM (
-        .clk(CLOCK50),
+        .clk(CLOCK_50),
         .save(save),
         .execute(execute),
         .reset(reset),
@@ -29,32 +29,32 @@ module top_level(
         .write_enable(write_enable),
         .read_enable(read_enable),
         .timer_enable(timer_enable)
-    )
+    );
 	 
     countdown u_clock (
-        .clk(CLOCK50), 
+        .clk(CLOCK_50), 
         .enable(timer_enable), 
         .timer(timer));
 
     debounce u_debounce0 (
-        .clk(CLOCK50), 
+        .clk(CLOCK_50), 
         .button(!KEY[0]),
         .button_edge(delete));
     debounce u_debounce1 (
-        .clk(CLOCK50), 
+        .clk(CLOCK_50), 
         .button(!KEY[1]),
         .button_edge(reset));
     debounce u_debounce2 (
-        .clk(CLOCK50), 
+        .clk(CLOCK_50), 
         .button(!KEY[2]),
         .button_edge(execute));
     debounce u_debounce3 (
-        .clk(CLOCK50), 
+        .clk(CLOCK_50), 
         .button(!KEY[3]),
         .button_edge(save));
 
     fifo u_fifo (
-        .clk(CLOCK50),
+        .clk(CLOCK_50),
         .rst(reset),
         .we(write_enable),
         .re(read_enable),

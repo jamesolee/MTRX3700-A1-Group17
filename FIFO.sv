@@ -37,7 +37,7 @@ module fifo (
         end
     end
 
-    assign empty = r_ptr == w_ptr? 1:0;
+    assign empty = (r_ptr == w_ptr+1)? 1:0;
     assign full = r_ptr[a_width-1:0] != w_ptr[a_width-1:0]? 0: 
                     r_ptr[a_width] != w_ptr[a_width]? 1:0;
 

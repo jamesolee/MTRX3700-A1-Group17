@@ -12,62 +12,69 @@ module torque_display(
     logic [3:0] half = 4'b1000;
     logic [3:0] three_quart = 4'b1100;
     logic [3:0] full = 4'b1111;
+	 
+	 //wires for LEDs
+	 logic [8:0] left_lights, right_lights;
 
     always_comb begin: torque_display
         if (~enable) begin
-            left_LED = {zero, 1'b0, zero};
-            right_LED = {zero, 1'b0, zero};
+            left_lights = {zero, 1'b0, zero};
+            right_lights = {zero, 1'b0, zero};
         end
 		  
 		  //extension version
         else begin
 				case (instruction)
               2'b00:begin //forward
-                 left_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
+                 left_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
                      (torque == 2'b01)? {zero, 1'b0, half}: 
                      (torque == 2'b10)? {zero, 1'b0, three_quart}:
                      (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
 
-                 right_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
+                 right_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
                      (torque == 2'b01)? {zero, 1'b0, half}: 
                      (torque == 2'b10)? {zero, 1'b0, three_quart}:
                      (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
              end
              2'b01:begin //reverse
-                 left_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
+                 left_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
                      (torque == 2'b01)? {half, 1'b0, zero}: 
                      (torque == 2'b10)? {three_quart, 1'b0, zero}:
                      (torque == 2'b11)? {full, 1'b0, zero} : {zero, 1'b0, zero};
 
-                 right_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
+                 right_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
                      (torque == 2'b01)? {half, 1'b0, zero}: 
                      (torque == 2'b10)? {three_quart, 1'b0, zero}:
                      (torque == 2'b11)? {full, 1'b0, zero} : {zero, 1'b0, zero};
              end
              2'b10:begin //left
-                 left_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
+                 left_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
                      (torque == 2'b01)? {zero, 1'b0, quart}: 
                      (torque == 2'b10)? {zero, 1'b0, half}:
-                     (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
+                     (torque == 2'b11)? {zero, 1'b0, three_quart} : {zero, 1'b0, zero};
 
-                 right_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
+                 right_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
                      (torque == 2'b01)? {zero, 1'b0, half}: 
                      (torque == 2'b10)? {zero, 1'b0, three_quart}:
                      (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
              end
-             2'b11:begin
-                 left_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
+             2'b11:begin //right
+                 left_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
                      (torque == 2'b01)? {zero, 1'b0, half}: 
                      (torque == 2'b10)? {zero, 1'b0, three_quart}:
                      (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
 
-                 right_LED = (torque == 2'b00)? {zero, 1'b0, zero}:  
+                 right_lights = (torque == 2'b00)? {zero, 1'b0, zero}:  
                      (torque == 2'b01)? {zero, 1'b0, quart}: 
                      (torque == 2'b10)? {zero, 1'b0, half}:
-                     (torque == 2'b11)? {zero, 1'b0, full} : {zero, 1'b0, zero};
+                     (torque == 2'b11)? {zero, 1'b0, three_quart} : {zero, 1'b0, zero};
              end
           endcase  
          end 
 
     end
+	 
+	 assign right_LED = right_lights;
+	 assign left_LED = left_lights;
+	 
 endmodule
