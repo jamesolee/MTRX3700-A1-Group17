@@ -36,13 +36,17 @@ module top_level_tb;
         $dumpfile("test_top_level.vcd");  // Tell the simulator to dump variables into the 'waveform.vcd' file during the simulation. Required to produce a waveform .vcd file.
         $dumpvars();
         CLOCK_50 = 0;
+        KEY[3] = 1;
+        KEY[2] = 1;
+        KEY[1] = 1;
+        KEY[0] = 1;
         #(4*units);
 
         SW = 5'b00000; // forward 0
         #(1*units); // 1 second delay between setting instruction switches and pressing the save key
-        KEY[3] = 1; // pressed save
+        KEY[3] = 0; // pressed save
         #(3*units);
-        KEY[3] = 0; // unpress save
+        KEY[3] = 1; // unpress save
         #(4*units);
 
         SW = 5'b00100; // forward 1
@@ -54,9 +58,9 @@ module top_level_tb;
 
         SW = 5'b01000; // forward 2
         #(1*units); // 1 second delay between setting instruction switches and pressing the save key
-        KEY[3] = 1; // pressed save
+        KEY[3] = 0; // pressed save
         #(3*units);
-        KEY[3] = 0; // unpress save
+        KEY[3] = 1; // unpress save
         #(4*units);
 
         SW = 5'b01100; // forward 3
@@ -68,14 +72,20 @@ module top_level_tb;
 
         SW = 5'b01110; // left 3
         #(1*units); // 1 second delay between setting instruction switches and pressing the save key
-        KEY[3] = 1; // pressed save
+        KEY[3] = 0; // pressed save
         #(3*units);
-        KEY[3] = 0; // unpress save
+        KEY[3] = 1; // unpress save
         #(4*units);
 
-        KEY[2] = 1; // pressed execute/read
+        KEY[2] = 0; // pressed execute/read
         #(3*units);
-        KEY[2] = 0;
+        KEY[2] = 1;
+        #(4*units);
+
+        KEY[1] = 0; // pressed reset
+        #(3*units);
+        KEY[1] = 1;
+        #(4*units);
 
         #(100*units); // leave to execute for 12 seconds
 
