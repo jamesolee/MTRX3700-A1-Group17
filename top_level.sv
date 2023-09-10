@@ -16,6 +16,7 @@ module top_level(
     logic empty, full;     
     logic timer; 
 
+	 // Module calls 
     FSM u_FSM (
         .clk(CLOCK_50),
         .save(save),

@@ -9,7 +9,8 @@ module fifo (
   output       empty,
   output       full
 );
-    //exact same thing as lab 2 FIFO with delete feature
+    //exact same thing as lab 2 FIFO
+    //except 2 commented parts
 
     //changed the width to 256 (5-bit address)
     reg [4:0]       ram [255:0];

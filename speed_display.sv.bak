@@ -102,6 +102,15 @@ module speed_display(
 	 assign bcd_r1 = reset? 12: n_bcd_r1;
 	 assign bcd_l2 = reset? 12: n_bcd_l2;
 	 assign bcd_l1 = reset? 12: n_bcd_l1;
+
+
+    // logic [3:0]bcd_r2 = 12;
+    // logic [3:0]test;
+
+    // always_ff @(posedge read_enable) begin
+    //     test <= (instruction > 0)? torque+test: 0;
+    //     bcd_r2 <= (~enable)? 12: test;
+    // end
     
     //// Seven-Segment Displays
     seven_seg u0(

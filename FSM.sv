@@ -6,10 +6,11 @@ module FSM(
 	 output logic [2:0] lights
 );
 
+	 // States 
     typedef enum logic [2:0] {idle, saving, waiting, read, display} State;
-	
 	 State current_state, next_state;
 
+	 // Next-state logic
     always_comb begin
         case (current_state)
             idle: next_state = (save)? saving: idle;
@@ -23,10 +24,12 @@ module FSM(
         endcase
     end
 	 
+	 // State flip-flop
 	 always_ff @(posedge clk) begin 
 		current_state <= next_state;
 	 end
     
+	 // FSM outputs
     assign write_enable = (current_state == saving)? 1:0;
     assign read_enable = (current_state == read)? 1:0;
     assign timer_enable = (current_state == read | current_state == display)? 1:0;

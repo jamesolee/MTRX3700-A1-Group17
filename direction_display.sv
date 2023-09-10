@@ -8,10 +8,6 @@ module direction_display(
 );
 
     always_comb begin
-			/*HEX0 = 7'b1111000;
-			HEX1 = 7'b1110000;
-			HEX2 = 7'b1100000;
-			HEX3 = 7'b1000000;*/
         if (enable) begin
             HEX0 = (direc == 2'b11)? 7'b0101111: 7'b1111111;
             HEX1 = (direc == 2'b10)? 7'b1000111: 7'b1111111;
